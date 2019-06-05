@@ -75,6 +75,13 @@ read var3
     rm -rf /opt/$var3
     rm /opt/kube_conf_files/volumes/$var1-pv-volume.yaml
     rm /opt/kube_conf_files/volumes/$var2-pv-claim.yaml
+
+;;
+-h)
+   echo "Use -a to add PersistentVolumeClaim and PersistentVolume to the kubernetes cluster or -d to delete";;
+
+ *) echo "Option $1 not recognized. Use -h for help" ;; # In case you typed a different option other than a,d,h
+
   esac
 
     shift
