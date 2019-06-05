@@ -5,6 +5,11 @@
 # Date      : 5-6-2019
 # Description: Add and remove ersistentVolume and Claims from Kubernetes Cluster
 ################################################################################
+#Placeholders
+volumedir=/opt/kube_conf_files/volumes/
+kustom=/opt/kube_conf_files/volumes/kustomization.yml
+
+
 # Options
 while [ -n "$1" ]; do # while loop starts
 
@@ -21,7 +26,7 @@ read var3
 echo -n "Enter volume directory: "
 read var4
 
-cat > /opt/kube_conf_files/volumes/$var1-pv-volume.yaml << EOF
+cat > $volumedir/$var1-pv-volume.yaml << EOF
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -38,7 +43,7 @@ spec:
     path: "$var4"
 EOF
 
-cat > /opt/kube_conf_files/volumes/$var2-pv-claim.yaml << EOF
+cat > $volumedir/$var2-pv-claim.yaml << EOF
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -52,10 +57,10 @@ spec:
       storage: ${var3}Gi
 EOF
 
-echo "- $var1-pv-volume.yaml" >> /opt/kube_conf_files/volumes/kustomization.yml
-echo "- $var2-pv-claim.yaml" >> /opt/kube_conf_files/volumes/kustomization.yml
+echo "- $var1-pv-volume.yaml" >> $kustom
+echo "- $var2-pv-claim.yaml" >> $kustom
 
-cd /opt/kube_conf_files/volumes/
+cd $volumedir
 kubectl apply -k ./
 ;;
 
@@ -68,13 +73,13 @@ read var2
 echo -n "Enter volume directory: "
 read var3
 
-    kubectl delete -f /opt/kube_conf_files/volumes/$var2-pv-claim.yaml
-    kubectl delete -f /opt/kube_conf_files/volumes/$var1-pv-volume.yaml
-    ex +g/$var1-pv-volume.yaml/d -cwq /opt/kube_conf_files/volumes/kustomization.yml
-    ex +g/$var2-pv-claim.yaml/d -cwq /opt/kube_conf_files/volumes/kustomization.yml
+    kubectl delete -f $volumedir/$var2-pv-claim.yaml
+    kubectl delete -f $volumedir/$var1-pv-volume.yaml
+    ex +g/$var1-pv-volume.yaml/d -cwq $kustom
+    ex +g/$var2-pv-claim.yaml/d -cwq $kustom
     rm -rf /opt/$var3
-    rm /opt/kube_conf_files/volumes/$var1-pv-volume.yaml
-    rm /opt/kube_conf_files/volumes/$var2-pv-claim.yaml
+    rm $volumedir/$var1-pv-volume.yaml
+    rm $volumedir/$var2-pv-claim.yaml
 
 ;;
 -h)
