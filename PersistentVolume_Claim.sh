@@ -73,7 +73,7 @@ read var2
     kubectl delete -f $volumedir/$var1-pv-volume.yaml
     ex +g/$var1-pv-volume.yaml/d -cwq $kustom
     ex +g/$var1-pv-claim.yaml/d -cwq $kustom
-    rm -rf /opt/$var2
+    rm -rf $var2
     rm $volumedir/$var1-pv-volume.yaml
     rm $volumedir/$var1-pv-claim.yaml
 
