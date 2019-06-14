@@ -2,8 +2,8 @@
 #set -x
 ################################################################################
 # Author    : Anibal Enrique Ojeda Gonzalez
-# Version   : 1.0
-# Date      : 5-6-2019
+# Version   : 1.1
+# Date      : 14-6-2019
 # Description: Add and remove PersistentVolume and Claims from Kubernetes Cluster
 ################################################################################
 #Placeholders
@@ -18,13 +18,13 @@ case "$1" in
 -a)
 
 echo -n "Enter PersistentVolume and Claim name: "
-read var1
+read -r var1
 echo -n "Enter storage in Gb: "
-read var2
+read -r var2
 echo -n "Enter volume directory: "
-read var3
+read -r var3
 echo -n "Enter namespace: "
-read var4
+read -r var4
 
 cat > $volumedir/$var1-pv-volume.yaml << EOF
 kind: PersistentVolume
@@ -69,9 +69,9 @@ kubectl apply -k ./
 -d)
 
 echo -n "Enter PersistentVolume and Claim name: "
-read var1
+read -r var1
 echo -n "Enter volume directory: "
-read var2
+read -r var2
 
     kubectl delete -f $volumedir/$var1-pv-claim.yaml
     kubectl delete -f $volumedir/$var1-pv-volume.yaml
