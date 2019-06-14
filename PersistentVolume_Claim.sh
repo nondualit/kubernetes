@@ -1,14 +1,15 @@
 #!/bin/bash
+#set -x
 ################################################################################
-# Author    : Anibal Ojeda
-# Version   : 0.2
-# Date      : 8-6-2019
+# Author     : Anibal Enrique Ojeda Gonzalez
+# Name       : PersistentVolume_Claim.sh
+# Version    : 1.2
+# Date       : 14-6-2019
 # Description: Add and remove PersistentVolume and Claims from Kubernetes Cluster
 ################################################################################
 #Placeholders
 volumedir=/opt/kube_conf_files/volumes/
 kustom=/opt/kube_conf_files/volumes/kustomization.yml
-
 
 # Options
 while [ -n "$1" ]; do # while loop starts
@@ -23,12 +24,15 @@ echo -n "Enter storage in Gb: "
 read var2
 echo -n "Enter volume directory: "
 read var3
+echo -n "Enter namespace: "
+read var4
 
 cat > $volumedir/$var1-pv-volume.yaml << EOF
 kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: $var1-pv-volume
+  namespace: $var4
   labels:
     type: local
 spec:
@@ -46,6 +50,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: $var1-pv-claim
+  namespace: $var4
 spec:
   storageClassName: manual
   accessModes:
@@ -73,15 +78,18 @@ read var2
     kubectl delete -f $volumedir/$var1-pv-volume.yaml
     ex +g/$var1-pv-volume.yaml/d -cwq $kustom
     ex +g/$var1-pv-claim.yaml/d -cwq $kustom
-    rm -rf $var2
+    rm -rf /opt/$var2
     rm $volumedir/$var1-pv-volume.yaml
     rm $volumedir/$var1-pv-claim.yaml
 
 ;;
 -h)
-   echo "Use -a to add PersistentVolumeClaim and PersistentVolume to the kubernetes cluster or -d to delete";;
+   echo "Use -a to add PersistentVolumeClaim and PersistentVolume to the kubernetes cluster, -d to delete or -v to view";;
 
- *) echo "Option $1 not recognized. Use -h for help" ;; # In case you typed a different option other than a,d,h
+-v)
+   cat $kustom;;
+
+ *) echo "Option $1 not recognized. Use -h for help" ;; # In case you typed a different option other than a,d,h,v
 
   esac
 
