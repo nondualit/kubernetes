@@ -1,10 +1,9 @@
 #!/bin/bash
 #set -x
 ################################################################################
-# Author     : Anibal Enrique Ojeda Gonzalez
-# Name       : PersistentVolume_Claim.sh
-# Version    : 1.2
-# Date       : 14-6-2019
+# Author    : Anibal Enrique Ojeda Gonzalez
+# Version   : 1.0
+# Date      : 5-6-2019
 # Description: Add and remove PersistentVolume and Claims from Kubernetes Cluster
 ################################################################################
 #Placeholders
@@ -84,7 +83,10 @@ read var2
 
 ;;
 -h)
-   echo "Use -a to add PersistentVolumeClaim and PersistentVolume to the kubernetes cluster, -d to delete or -v to view";;
+   echo "PersistentVolume_Claim.sh options
+-a to add PersistentVolumeClaim and PersistentVolume
+-d to delete
+-v to view";;
 
 -v)
    cat $kustom;;
